@@ -9,8 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.example.recordkeeper.databinding.ActivityMainBinding
+import com.example.recordkeeper.roomDataBase.Record
+import com.example.recordkeeper.roomDataBase.RecordLogDatabase
+import com.example.recordkeeper.roomDataBase.RecordType
+import com.example.recordkeeper.roomDataBase.getCurrentFormattedDate
 import com.google.android.material.navigation.NavigationBarView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +35,28 @@ class MainActivity : AppCompatActivity() {
         setActionBar()
         onRunningClicked()
         setupBottomBar()
+        initializedDataBase()
     }
+
+    private fun initializedDataBase() {
+        val recordDao = RecordLogDatabase.getDatabase(this).recordDao()
+
+        lifecycleScope.launch {
+            try {
+                val allRecords = recordDao.getAllRecords()
+                if (allRecords.isEmpty()) {
+                    RecordType.entries.forEach { type ->
+                        recordDao.insertOrUpdateRecord(
+                            Record(type = type, time = "00:00", date = getCurrentFormattedDate())
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar, menu)
