@@ -1,6 +1,7 @@
 package com.example.recordkeeper
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -59,6 +60,8 @@ class EditRunningRecordActivity : AppCompatActivity() {
                     getCurrentFormattedDate()
                 )
             }
+            Toast.makeText(this, "Record updated", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 

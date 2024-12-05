@@ -12,6 +12,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.example.recordkeeper.databinding.ActivityMainBinding
 import com.example.recordkeeper.roomDataBase.Record
+import com.example.recordkeeper.roomDataBase.RecordDao
 import com.example.recordkeeper.roomDataBase.RecordLogDatabase
 import com.example.recordkeeper.roomDataBase.RecordType
 import com.example.recordkeeper.roomDataBase.getCurrentFormattedDate
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var recordDao: RecordDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +34,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        setActionBar()
-        onRunningClicked()
+        setSupportActionBar(binding.toolbar)
         setupBottomBar()
         initializedDataBase()
     }
 
     private fun initializedDataBase() {
-        val recordDao = RecordLogDatabase.getDatabase(this).recordDao()
+        recordDao = RecordLogDatabase.getDatabase(this).recordDao()
 
         lifecycleScope.launch {
             try {
@@ -75,6 +76,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         R.id.reset_all -> {
+            lifecycleScope.launch {
+                RecordType.entries.forEach { type ->
+                    recordDao.insertOrUpdateRecord(
+                        Record(type = type, time = "00:00", date = getCurrentFormattedDate())
+                    )
+                }
+                recreate()
+            }
             Toast.makeText(this, "Reset All Records", Toast.LENGTH_SHORT).show()
             true
         }
@@ -144,7 +153,4 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.frame_content, CyclingFragment())
         }
     }
-
-    private fun setActionBar() = setSupportActionBar(binding.toolbar)
-
 }
