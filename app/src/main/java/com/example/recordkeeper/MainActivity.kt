@@ -113,15 +113,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBottomBar() {
-        binding.bottomNav.setOnItemSelectedListener(navigationItemSelectedListener)
-    }
+    private fun setupBottomBar() = binding.bottomNav.setOnItemSelectedListener(navigationItemSelectedListener)
 
     /*
     This is the other way for the callback above
     */
-//    private fun setupBottomBar() {
-//        binding.bottomNav.setOnItemSelectedListener(object :
+//    private fun setupBottomBar() = binding.bottomNav.setOnItemSelectedListener(object :
 //            NavigationBarView.OnItemSelectedListener {
 //            override fun onNavigationItemSelected(item: MenuItem): Boolean {
 //                when (item.itemId) {
@@ -140,7 +137,6 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            }
 //        })
-//    }
 
     private fun onRunningClicked() {
         supportFragmentManager.commit {

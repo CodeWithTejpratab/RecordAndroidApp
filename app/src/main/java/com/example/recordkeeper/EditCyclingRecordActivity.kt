@@ -16,17 +16,14 @@ import kotlinx.coroutines.launch
 
 class EditCyclingRecordActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditCyclingRecordBinding
-    private lateinit var recordDao: RecordDao
-    private lateinit var distance: String
+    private val binding: ActivityEditCyclingRecordBinding by lazy { ActivityEditCyclingRecordBinding.inflate(layoutInflater) }
+    private val recordDao: RecordDao by lazy { RecordLogDatabase.getDatabase(this).recordDao() }
+    private val distance: String by lazy { intent.getStringExtra("Distance") ?: "Cycling" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityEditCyclingRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        distance = intent.getStringExtra("Distance") ?: "Cycling"
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -35,8 +32,6 @@ class EditCyclingRecordActivity : AppCompatActivity() {
         }
 
         setActionBar()
-
-        recordDao = RecordLogDatabase.getDatabase(this).recordDao()
 
         binding.saveButton.setOnClickListener {
             setupSaveButton(distance)
