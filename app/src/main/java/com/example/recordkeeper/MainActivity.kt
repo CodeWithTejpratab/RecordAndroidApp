@@ -115,29 +115,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomBar() = binding.bottomNav.setOnItemSelectedListener(navigationItemSelectedListener)
 
-    /*
-    This is the other way for the callback above
-    */
-//    private fun setupBottomBar() = binding.bottomNav.setOnItemSelectedListener(object :
-//            NavigationBarView.OnItemSelectedListener {
-//            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//                when (item.itemId) {
-//                    R.id.nav_running -> {
-//                        onRunningClicked()
-//                        return true
-//                    }
-//
-//                    R.id.nav_cycling -> {
-//                        onCyclingClicked()
-//                        return true
-//                    }
-//
-//                    else -> return false
-//
-//                }
-//            }
-//        })
-
     private fun onRunningClicked() {
         supportFragmentManager.commit {
             replace(R.id.frame_content, RunningFragment())
