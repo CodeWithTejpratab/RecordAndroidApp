@@ -14,4 +14,5 @@
     <string name="reset_cycling_records">reset cycling records</string>
     <string name="reset_all_records">reset all records</string>
     <string name="save">Save</string>
+    <string name="na">N/A</string>
 </resources>

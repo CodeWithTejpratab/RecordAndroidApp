@@ -18,6 +18,7 @@ class CyclingFragment : Fragment() {
 
     private lateinit var binding: FragmentCyclingBinding
     private lateinit var recordDao: RecordDao
+    private val nA: String by lazy { getString(R.string.na) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,28 +46,30 @@ class CyclingFragment : Fragment() {
             val biggestClimb = async { recordDao.getRecordByType(RecordType.BiggestClimb) }
             val bestAverageSpeed = async { recordDao.getRecordByType(RecordType.BestAverageSpeed) }
 
-            longestRide.await()?.let {
-                binding.textViewLongestRideTimeValue.text = it.time
-                binding.textViewLongestRideDate.text = it.date
-            } ?: run {
-                binding.textViewLongestRideTimeValue.text = "N/A"
-                binding.textViewLongestRideDate.text = "N/A"
-            }
+            with(binding) {
+                longestRide.await()?.let {
+                    textViewLongestRideTimeValue.text = it.time
+                    textViewLongestRideDate.text = it.date
+                } ?: run {
+                    textViewLongestRideTimeValue.text = nA
+                    textViewLongestRideDate.text = nA
+                }
 
-            biggestClimb.await()?.let {
-                binding.textViewBiggestClimbTimeValue.text = it.time
-                binding.textViewBiggestClimbDate.text = it.date
-            } ?: run {
-                binding.textViewBiggestClimbTimeValue.text = "N/A"
-                binding.textViewBiggestClimbDate.text = "N/A"
-            }
+                biggestClimb.await()?.let {
+                    textViewBiggestClimbTimeValue.text = it.time
+                    textViewBiggestClimbDate.text = it.date
+                } ?: run {
+                    textViewBiggestClimbTimeValue.text = nA
+                    textViewBiggestClimbDate.text = nA
+                }
 
-            bestAverageSpeed.await()?.let {
-                binding.textViewBestAverageSpeedTimeValue.text = it.time
-                binding.textViewBestAverageSpeedDate.text = it.date
-            } ?: run {
-                binding.textViewBestAverageSpeedTimeValue.text = "N/A"
-                binding.textViewBestAverageSpeedDate.text = "N/A"
+                bestAverageSpeed.await()?.let {
+                    textViewBestAverageSpeedTimeValue.text = it.time
+                    textViewBestAverageSpeedDate.text = it.date
+                } ?: run {
+                    textViewBestAverageSpeedTimeValue.text = nA
+                    textViewBestAverageSpeedDate.text = nA
+                }
             }
         }
     }

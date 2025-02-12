@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 class RunningFragment : Fragment() {
 
     private lateinit var binding: FragmentRunningBinding
-    private lateinit  var recordDao: RecordDao
+    private lateinit var recordDao: RecordDao
+    private val nA: String by lazy { getString(R.string.na) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,36 +47,38 @@ class RunningFragment : Fragment() {
             val halfMarathonRecord = async { recordDao.getRecordByType(RecordType.HalfMarathon) }
             val marathonRecord = async { recordDao.getRecordByType(RecordType.Marathon) }
 
-            fiveKmRecord.await()?.let {
-                binding.textView5kmTimeValue.text = it.time
-                binding.textView5kmDate.text = it.date
-            } ?: run {
-                binding.textView5kmTimeValue.text = "N/A"
-                binding.textView5kmDate.text = "N/A"
-            }
+            with(binding) {
+                fiveKmRecord.await()?.let {
+                    textView5kmTimeValue.text = it.time
+                    textView5kmDate.text = it.date
+                } ?: run {
+                    textView5kmTimeValue.text = nA
+                    textView5kmDate.text = nA
+                }
 
-            tenKmRecord.await()?.let {
-                binding.textView10kmTimeValue.text = it.time
-                binding.textView10kmDate.text = it.date
-            } ?: run {
-                binding.textView10kmTimeValue.text = "N/A"
-                binding.textView10kmDate.text = "N/A"
-            }
+                tenKmRecord.await()?.let {
+                    textView10kmTimeValue.text = it.time
+                    textView10kmDate.text = it.date
+                } ?: run {
+                    textView10kmTimeValue.text = nA
+                    textView10kmDate.text = nA
+                }
 
-            halfMarathonRecord.await()?.let {
-                binding.textViewHalfMarathonTimeValue.text = it.time
-                binding.textViewHalfMarathonDate.text = it.date
-            } ?: run {
-                binding.textViewHalfMarathonTimeValue.text = "N/A"
-                binding.textViewHalfMarathonDate.text = "N/A"
-            }
+                halfMarathonRecord.await()?.let {
+                    textViewHalfMarathonTimeValue.text = it.time
+                    textViewHalfMarathonDate.text = it.date
+                } ?: run {
+                    textViewHalfMarathonTimeValue.text = nA
+                    textViewHalfMarathonDate.text = nA
+                }
 
-            marathonRecord.await()?.let {
-                binding.textViewMarathonTimeValue.text = it.time
-                binding.textViewMarathonDate.text = it.date
-            } ?: run {
-                binding.textViewMarathonTimeValue.text = "N/A"
-                binding.textViewMarathonDate.text = "N/A"
+                marathonRecord.await()?.let {
+                    textViewMarathonTimeValue.text = it.time
+                    textViewMarathonDate.text = it.date
+                } ?: run {
+                    textViewMarathonTimeValue.text = nA
+                    textViewMarathonDate.text = nA
+                }
             }
         }
     }
